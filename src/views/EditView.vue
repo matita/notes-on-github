@@ -11,7 +11,9 @@
 
 <template>
   <div class="wrapper">
-    <div class="filepath">Filepath: {{ filepath }}</div>
+    <select>
+      <option :value="filepath" selected>{{ filepath }}</option>
+    </select>
     <CodeEditor 
       :value="files.fileContent(filepath)" 
       @input="files.updateFile(filepath, $event)"

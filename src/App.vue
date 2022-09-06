@@ -4,14 +4,14 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    
+    <RouterLink to="/edit">Edit</RouterLink>
+    &middot;
+    <RouterLink to="/settings">Settings</RouterLink>
   </header>
 
   <RouterView />
 </template>
 
 <style scoped>
-@media (min-width: 1024px) {
-  
-}
+
 </style>
