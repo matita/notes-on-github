@@ -2,6 +2,7 @@
   import CodeEditor from '@/components/CodeEditor.vue';
   import { useFilesStore } from '@/stores/files';
   import { debounce } from 'lodash-es';
+import { watch } from 'vue';
 
   const props = defineProps<{
     filepath: string
@@ -11,6 +12,16 @@
   const onFileChange = debounce((fileContent) => {
     files.updateFile(props.filepath, fileContent);
   }, 500);
+
+  watch(
+    () => props.filepath,
+    (newFilepath) => {
+      files.fetchFile(newFilepath);
+    },
+    {
+      immediate: true,
+    }
+  );
 </script>
 
 <template>

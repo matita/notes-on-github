@@ -6,6 +6,8 @@ import './assets/main.css'
 import { useGithubSettings } from './stores/githubSettings'
 import { pinia } from './stores'
 
+window.global = window;
+
 const app = createApp(App)
 
 app.use(pinia)

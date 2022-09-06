@@ -1,21 +1,27 @@
 import { defineStore } from "pinia";
+import { fetchFileContent } from "@/utils/github";
+
+interface FilesMap { 
+  [key: string]: string 
+}
 
 export const useFilesStore = defineStore('files', {
   state: () => ({
-    files: new Map<string, string>()
+    files: {} as FilesMap
   }),
 
   getters: {
-    fileContent: (state) => (filepath:string) => state.files.get(filepath),
+    fileContent: (state) => (filepath:string) => state.files[filepath],
   },
 
   actions: {
-    fetchFile(filepath: string):string {
-      return this.$state.files.get(filepath) as string;
+    async fetchFile(filepath: string) {
+      const content = await fetchFileContent(filepath);
+      this.$state.files[filepath] = content;
     },
 
     updateFile(filepath: string, fileContent: string) {
-      this.$state.files.set(filepath, fileContent);
+      this.$state.files[filepath] = fileContent;
     },
   }
 })
