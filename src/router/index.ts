@@ -1,13 +1,29 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHashHistory } from 'vue-router'
+import EditView from '../views/EditView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      redirect: '/edit'
+    },
+    {
+      path: '/edit',
+      name: 'edit-home',
+      component: EditView,
+      beforeEnter() {
+        const pad = (n: number) => `0${n}`.substring(-2);
+        const date = new Date();
+        return { path: `/edit/notes/${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.md` };
+      }
+    },
+    {
+      path: '/edit/:filepath(.*)',
+      name: 'edit',
+      component: EditView,
+      props: true
     },
     {
       path: '/about',
