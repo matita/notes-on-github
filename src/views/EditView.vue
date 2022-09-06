@@ -1,12 +1,16 @@
 <script setup lang="ts">
   import CodeEditor from '@/components/CodeEditor.vue';
   import { useFilesStore } from '@/stores/files';
+  import { debounce } from 'lodash-es';
 
-  defineProps<{
+  const props = defineProps<{
     filepath: string
   }>();
 
   const files = useFilesStore();
+  const onFileChange = debounce((fileContent) => {
+    files.updateFile(props.filepath, fileContent);
+  }, 500);
 </script>
 
 <template>
@@ -16,7 +20,7 @@
     </select>
     <CodeEditor 
       :value="files.fileContent(filepath)" 
-      @input="files.updateFile(filepath, $event)"
+      @input="onFileChange"
     ></CodeEditor>
   </div>
 </template>
