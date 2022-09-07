@@ -1,4 +1,4 @@
 * update content on GitHub
-* make file data structure with `{ isLoading, localContent, remoteContent, sha }` etc.
-* use CodeMirror instead of textarea
-  * dynamic height: https://discuss.codemirror.net/t/why-does-my-codemirrors-height-doesnt-change-with-the-css/3498/3
+* ~~make file data structure with `{ isLoading, localContent, remoteContent, sha }` etc.~~
+* ~~use CodeMirror instead of textarea~~
+* set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)

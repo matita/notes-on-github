@@ -9,10 +9,10 @@
   }>();
 
   const files = useFilesStore();
-  const file = computed(() => files.fileContent(props.filepath));
+  const file = computed(() => files.getFile(props.filepath));
 
   const onFileChange = debounce((fileContent) => {
-    files.updateFile(props.filepath, fileContent);
+    files.updateFileContent(props.filepath, fileContent);
   }, 500);
 
 
@@ -35,8 +35,8 @@
     <div class="editor-wrapper">
       <CodeEditor 
         :placeholder="file?.isLoading ? 'Loading' : 'No content'"
-        :value="file?.remoteContent || ''" 
-        @input="onFileChange"
+        :value="files.getFileContent(props.filepath) || ''" 
+        @change="onFileChange"
       ></CodeEditor>
     </div>
   </div>

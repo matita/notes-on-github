@@ -17,17 +17,24 @@ export const useFilesStore = defineStore('files', {
   }),
 
   getters: {
-    fileContent: (state) => (filepath:string) => state.files[filepath],
+    getFile: (state) => (filepath:string) => state.files[filepath],
+    getFileContent: (state) => (filepath: string) => state.files[filepath]?.localContent
   },
 
   actions: {
     async fetchFile(filepath: string) {
       this.updateFile(filepath, { isLoading: true })
       const content = await fetchFileContent(filepath);
-      this.updateFile(filepath, {
+
+      const newState: CodeFile = {
         isLoading: false,
         remoteContent: content,
-      });
+      };
+
+      if (!this.getFile(filepath)?.localContent && content) {
+        newState.localContent = content;
+      }
+      this.updateFile(filepath, newState);
     },
 
     updateFile(filepath: string, options: CodeFile) {
@@ -37,5 +44,9 @@ export const useFilesStore = defineStore('files', {
         ...options,
       };
     },
+
+    updateFileContent(filepath: string, localContent: string) {
+      this.updateFile(filepath, { localContent });
+    }
   }
 })
