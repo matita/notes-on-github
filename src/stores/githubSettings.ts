@@ -2,8 +2,14 @@ import { defineStore } from "pinia";
 
 const STORAGE_KEY = 'nog:settings';
 
+interface GitHubSettings {
+  token: string,
+  repoUser: string,
+  repoName: string,
+}
+
 export const useGithubSettings = defineStore('githubSettings', {
-  state: () => ({
+  state: (): GitHubSettings => ({
     token: '',
     repoUser: '',
     repoName: '',
@@ -16,7 +22,7 @@ export const useGithubSettings = defineStore('githubSettings', {
   },
 
   actions: {
-    save({ token, repoUser, repoName }) {
+    save({ token, repoUser, repoName }: GitHubSettings) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ token, repoUser, repoName }));
       this.token = token;
       this.repoUser = repoUser;
