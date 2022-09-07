@@ -1,5 +1,4 @@
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
-* publish project on GH pages
 * bookmarklet to open the note at the current day
 * append some text to current note when `?append=some+text` is sent in the query string
 
@@ -10,6 +9,7 @@
 * theme from vscode
 
 ## Done
+* ~~publish project on GH pages~~
 * ~~some times the sha is desyncronized and after some edits it says "Invalid request.\n\n\"sha\" wasn't supplied."~~
 * ~~update content on GitHub~~
 * ~~make file data structure with `{ isLoading, localContent, remoteContent, sha }` etc.~~
