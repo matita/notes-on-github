@@ -2,16 +2,19 @@
   import CodeEditor from '@/components/CodeEditor.vue';
   import { useFilesStore } from '@/stores/files';
   import { debounce } from 'lodash-es';
-import { watch } from 'vue';
+  import { watch, computed } from 'vue';
 
   const props = defineProps<{
     filepath: string
   }>();
 
   const files = useFilesStore();
+  const file = computed(() => files.fileContent(props.filepath));
+
   const onFileChange = debounce((fileContent) => {
     files.updateFile(props.filepath, fileContent);
   }, 500);
+
 
   watch(
     () => props.filepath,
@@ -29,10 +32,13 @@ import { watch } from 'vue';
     <select>
       <option :value="filepath" selected>{{ filepath }}</option>
     </select>
-    <CodeEditor 
-      :value="files.fileContent(filepath)" 
-      @input="onFileChange"
-    ></CodeEditor>
+    <div class="editor-wrapper">
+      <CodeEditor 
+        :placeholder="file?.isLoading ? 'Loading' : 'No content'"
+        :value="file?.remoteContent || ''" 
+        @input="onFileChange"
+      ></CodeEditor>
+    </div>
   </div>
 </template>
 
@@ -46,5 +52,9 @@ import { watch } from 'vue';
 .filepath {
   opacity: .8;
   padding: .4rem 1rem;
+}
+
+.editor-wrapper {
+  flex: 1;
 }
 </style>
