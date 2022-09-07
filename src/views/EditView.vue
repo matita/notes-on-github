@@ -34,7 +34,7 @@
     </select>
     <div class="editor-wrapper">
       <CodeEditor 
-        :placeholder="file?.isLoading ? 'Loading' : 'No content'"
+        :placeholder="file?.isPulling ? 'Loading' : 'No content'"
         :value="files.getFileContent(props.filepath) || ''" 
         @change="onFileChange"
       ></CodeEditor>

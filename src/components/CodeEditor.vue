@@ -20,14 +20,6 @@
     oneDark,
     EditorView.lineWrapping,
   ];
-
-  const onChange = (value: string) => {
-    console.log(value);
-  } 
-
-  const handleReady = ({ view } : { view:EditorView }) => {
-    
-  }
 </script>
 
 <script lang="ts">
@@ -39,9 +31,6 @@
     :placeholder="placeholder || ''"
     :model-value="value"
     :extensions="extensions"
-
-    @ready="handleReady"
-    @change="onChange"
   ></Codemirror>
 </template>
 

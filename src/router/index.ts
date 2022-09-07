@@ -37,10 +37,12 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
+  // To avoid infinite loop
   if (to.name === 'settings') {
     return;
   }
 
+  // Redirect to settings if the GitHub token hasn't been set yet
   const githubSettings = useGithubSettings(pinia);
   if(!githubSettings.token || !githubSettings.repo) {
     return { name: 'settings' };
