@@ -19,11 +19,15 @@ interface FilesMap {
 
 const debouncedUpdateFile = debounce(async (store, filepath, payload:UpdateFileOptions) => {
   store.updateFile(filepath, { isPushing: true });
-  const newGhFile = await updateFileContent(filepath, payload);
-  store.updateFile(filepath, { 
-    isPushing: false,
-    sha: newGhFile?.content?.sha,
-  });
+  const file = store.getFile(filepath);
+  const newGhFile = await updateFileContent(filepath, { ...payload, sha: file.sha });
+  
+  const newState: CodeFile = { isPushing: false };
+  if (newGhFile?.content?.sha) {
+    newState.sha = newGhFile.content.sha;
+  }
+
+  store.updateFile(filepath, newState);
 }, DEBOUNCE_UPDATE_MS);
 
 export const useFilesStore = defineStore('files', {
@@ -55,6 +59,11 @@ export const useFilesStore = defineStore('files', {
 
     updateFile(filepath: string, options: CodeFile) {
       const currentFile = this.$state.files[filepath] || {};
+
+      if (currentFile.sha && ('sha' in options) && !options.sha) {
+        throw new Error('Removing sha');
+      }
+
       this.$state.files[filepath] = {
         ...currentFile,
         ...options,
@@ -63,12 +72,9 @@ export const useFilesStore = defineStore('files', {
 
     async updateFileContent(filepath: string, localContent: string) {
       this.updateFile(filepath, { localContent });
-      const file = this.getFile(filepath);
-      
       debouncedUpdateFile(this, filepath, { 
         content: localContent,
-        message: 'Update file',
-        sha: file?.sha
+        message: 'Update file'
       });
     }
   }
