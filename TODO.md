@@ -1,6 +1,12 @@
-* set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * bookmarklet to open the note at the current day
 * append some text to current note when `?append=some+text` is sent in the query string
+* set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
+* show status of current file
+* add toasts to show error messages
+* handle conflicts with remote file
+* add settings:
+  * default first file (`notes/YYYY-MM-DD.md` by default)
+  * delay ms for pushing
 
 ## Markdown editor changes
 * underline for URLs that are not a link
