@@ -17,6 +17,10 @@
 * some styling for quotes (maybe)
 * theme from vscode
 
+## Cool ideas
+
+* search asana task by typing `@asana some task title` and have the autocompletion search for it
+
 ## Done
 * ~~publish project on GH pages~~
 * ~~some times the sha is desyncronized and after some edits it says "Invalid request.\n\n\"sha\" wasn't supplied."~~
