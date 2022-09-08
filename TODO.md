@@ -1,3 +1,4 @@
+* change title of index.html
 * bookmarklet to open the note at the current day
 * append some text to current note when `?append=some+text` is sent in the query string
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
@@ -7,6 +8,8 @@
 * add settings:
   * default first file (`notes/YYYY-MM-DD.md` by default)
   * delay ms for pushing
+* prevent closing the the window if it's still saving
+* press <kbd>Esc</kbd> to hide the popup and close it when everything has been saved
 
 ## Markdown editor changes
 * underline for URLs that are not a link
