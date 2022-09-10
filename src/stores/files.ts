@@ -25,12 +25,11 @@ const debouncedUpdateFile = debounce(async (store, filepath, payload:UpdateFileO
   const file = store.getFile(filepath);
   const newGhFile = await updateFileContent(filepath, { ...payload, sha: file.sha });
 
-  if (newGhFile?.message && newGhFile?.message.match(/does not match/)) {
+  if (newGhFile?.message && newGhFile?.message?.match(/does not match/)) {
     if (confirm(CONFIRM_MERGE_ERROR)) {
       return location.reload();
     }
   }
-  console.log({ newGhFile, message: newGhFile?.message, errorMatch: newGhFile?.message.match(/does not match/) });
   
   const newState: CodeFile = { isPushing: false };
   if (newGhFile?.content?.sha) {
