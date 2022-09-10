@@ -3,10 +3,15 @@
   import { markdown } from '@codemirror/lang-markdown';
   import { oneDark } from '@codemirror/theme-one-dark';
   import { EditorView } from 'codemirror';
+  import { EditorSelection } from '@codemirror/state';
+import { ref, watch } from 'vue';
 
-  defineProps<{
+  const props = defineProps<{
     placeholder?: string,
-    value?: string
+    value?: string,
+    selection?: [number, number?],
+    autofocus?: boolean,
+    disabled?:boolean,
   }>();
 
   const fullHeight = EditorView.theme({
@@ -14,16 +19,29 @@
     '& .cm-scroller': { overflow: 'auto' },
   });
 
+  const editorView = ref<EditorView>();
+
   const extensions = [
     markdown(),
     fullHeight,
     oneDark,
     EditorView.lineWrapping,
   ];
-</script>
 
-<script lang="ts">
-  
+  watch(
+    () => props.selection,
+    (newSelection) => {
+      if (newSelection) {
+        const selection = EditorSelection.range(newSelection[0], newSelection[1] ?? newSelection[0]);
+        editorView.value?.focus();
+        editorView.value?.dispatch({ selection });
+      }
+    }
+  );
+
+  const handleReady = ({ view } : { view:EditorView }) => {
+    editorView.value = view;
+  };
 </script>
 
 <template>
@@ -31,6 +49,9 @@
     :placeholder="placeholder || ''"
     :model-value="value"
     :extensions="extensions"
+    :autofocus="autofocus"
+    :disabled="disabled"
+    @ready="handleReady"
   ></Codemirror>
 </template>
 

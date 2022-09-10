@@ -1,5 +1,3 @@
-* bookmarklet to open the note at the current day
-* append some text to current note when `?append=some+text` is sent in the query string
 * append title and url of current page from bookmarklet
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * show status of current file
@@ -8,6 +6,8 @@
 * add settings:
   * default first file (`notes/YYYY-MM-DD.md` by default)
   * delay ms for pushing
+  * template for new notes (default `## hh:mm:ss\n\n`)
+  * separator for new notes (default `\n\n-----\n`)
 * prevent closing the the window if it's still saving
 * press <kbd>Esc</kbd> to hide the popup and close it when everything has been saved
 
@@ -22,6 +22,8 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~append some text to current note when `?append=some+text` is sent in the query string~~
+* ~~bookmarklet to open the note at the current day~~
 * ~~change title of index.html~~
 * ~~publish project on GH pages~~
 * ~~some times the sha is desyncronized and after some edits it says "Invalid request.\n\n\"sha\" wasn't supplied."~~

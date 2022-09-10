@@ -52,7 +52,7 @@ export const fetchFile = async (filepath: string) => {
   const res = await api()?.get(`/repos/${settings.repoUser}/${settings.repoName}/contents/${filepath}`);
   const data = await res?.json();
   
-  if (!data?.content) {
+  if (typeof data?.content === 'undefined') {
     return null;
   }
   

@@ -37,7 +37,10 @@ export const useFilesStore = defineStore('files', {
 
   getters: {
     getFile: (state) => (filepath:string) => state.files[filepath],
-    getFileContent: (state) => (filepath: string) => state.files[filepath]?.localContent
+    getFileContent: (state) => (filepath: string) => { 
+      const file = state.files[filepath];
+      return file?.localContent;
+    }
   },
 
   actions: {
@@ -76,6 +79,17 @@ export const useFilesStore = defineStore('files', {
         content: localContent,
         message: 'Update file'
       });
-    }
+    },
+
+    async appendContent(filepath: string, toAppend: string, withSeparator = true) {
+      const file = this.getFile(filepath);
+      const content = file?.localContent;
+      const separator = withSeparator ? '\n\n-----\n' : '';
+      const newContent = content?.trim()
+        ? content + separator + toAppend
+        : toAppend;
+
+      this.updateFile(filepath, { localContent: newContent });
+    },
   }
 })
