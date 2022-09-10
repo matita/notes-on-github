@@ -1,6 +1,6 @@
-* change title of index.html
 * bookmarklet to open the note at the current day
 * append some text to current note when `?append=some+text` is sent in the query string
+* append title and url of current page from bookmarklet
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * show status of current file
 * add toasts to show error messages
@@ -22,6 +22,7 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~change title of index.html~~
 * ~~publish project on GH pages~~
 * ~~some times the sha is desyncronized and after some edits it says "Invalid request.\n\n\"sha\" wasn't supplied."~~
 * ~~update content on GitHub~~
