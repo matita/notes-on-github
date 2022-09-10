@@ -1,13 +1,13 @@
+* prevent closing the the window if it's still saving
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * show status of current file
+* improve handling of merge error
 * add toasts to show error messages
-* handle conflicts with remote file
 * add settings:
-  * default first file (`notes/YYYY-MM-DD.md` by default)
+  * default first file (`notes/{YYYY}-{MM}-{DD}.md` by default)
   * delay ms for pushing
-  * template for new notes (default `## hh:mm:ss\n\n`)
+  * template for new notes (default `## {hh}:{mm}:{ss}\n\n`)
   * separator for new notes (default `\n\n-----\n`)
-* prevent closing the the window if it's still saving
 * press <kbd>Esc</kbd> to hide the popup and close it when everything has been saved
 * from bookmarklet add also currently selected text as blockquote
 
@@ -22,6 +22,7 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~handle conflicts with remote file~~
 * ~~append title and url of current page from bookmarklet~~
 * ~~append some text to current note when `?append=some+text` is sent in the query string~~
 * ~~bookmarklet to open the note at the current day~~

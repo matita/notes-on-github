@@ -4,6 +4,9 @@ import type { UpdateFileOptions } from '@/utils/github'
 import { debounce } from "lodash";
 
 const DEBOUNCE_UPDATE_MS = 1000;
+const CONFIRM_MERGE_ERROR = `Error while saving, most likely the file has changed remotely.
+Do you want to refresh the page to synchronize?
+!!! Please note that you might lose your changes !!!`;
 
 interface CodeFile {
   isPulling?: boolean,
@@ -21,6 +24,13 @@ const debouncedUpdateFile = debounce(async (store, filepath, payload:UpdateFileO
   store.updateFile(filepath, { isPushing: true });
   const file = store.getFile(filepath);
   const newGhFile = await updateFileContent(filepath, { ...payload, sha: file.sha });
+
+  if (newGhFile?.message && newGhFile?.message.match(/does not match/)) {
+    if (confirm(CONFIRM_MERGE_ERROR)) {
+      return location.reload();
+    }
+  }
+  console.log({ newGhFile, message: newGhFile?.message, errorMatch: newGhFile?.message.match(/does not match/) });
   
   const newState: CodeFile = { isPushing: false };
   if (newGhFile?.content?.sha) {
