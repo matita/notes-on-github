@@ -1,4 +1,3 @@
-* append title and url of current page from bookmarklet
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * show status of current file
 * add toasts to show error messages
@@ -22,6 +21,7 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~append title and url of current page from bookmarklet~~
 * ~~append some text to current note when `?append=some+text` is sent in the query string~~
 * ~~bookmarklet to open the note at the current day~~
 * ~~change title of index.html~~

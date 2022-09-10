@@ -25,17 +25,38 @@
     () => props.filepath,
     async (newFilepath) => {
       await files.fetchFile(newFilepath);
-      if ('append' in route.query) {
-        const { formattedNewNoteTemplate } = useSettings(pinia);
-        files.appendContent(newFilepath, formattedNewNoteTemplate);
+      
+      let cursor = -1;
+      let endCursor = -1;
+      const { append } = route.query;
+      if (typeof append !== 'undefined') {
+        const { formattedNewNoteTemplate, formattedSeparator } = useSettings(pinia);
+
+        const valueToAppend = (append || '') as string;
+        const indexOfValue = formattedNewNoteTemplate.indexOf('{value}');
+        const finalValue = formattedNewNoteTemplate.replace('{value}', valueToAppend);
+        const content = files.getFileContent(newFilepath);
+        const prefix = content?.trim()
+          ? content + formattedSeparator
+          : '';
+        const newContent = prefix + finalValue;
+        cursor = (prefix.length) 
+          + (indexOfValue === -1 ? finalValue.length : indexOfValue);
+        endCursor = cursor + valueToAppend.length;
+
+        files.updateFile(newFilepath, { localContent: newContent });
         router.replace({ path: route.path, query: {} });
       }
       
       nextTick(() => {
-        const file = files.getFile(newFilepath);
-        const index = file?.localContent?.length || 0;
-        selection.value = [index];
-
+        if (cursor === -1) {
+          const file = files.getFile(newFilepath);
+          cursor = file?.localContent?.length || 0;
+          endCursor = cursor;
+        }
+        
+        selection.value = [cursor, endCursor];
+        window.scrollTo(0, document.body.scrollHeight);
       });
     },
     {
