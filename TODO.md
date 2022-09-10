@@ -9,11 +9,12 @@
   * separator for new notes (default `\n\n-----\n`)
 * prevent closing the the window if it's still saving
 * press <kbd>Esc</kbd> to hide the popup and close it when everything has been saved
+* from bookmarklet add also currently selected text as blockquote
 
 ## Markdown editor changes
 * underline for URLs that are not a link
 * open link when cmd+click on any URL in the text
-* some styling for quotes (maybe)
+* some styling for blockquotes (maybe)
 * theme from vscode
 
 ## Cool ideas
