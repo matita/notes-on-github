@@ -1,4 +1,3 @@
-* prevent closing the the window if it's still saving
 * set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * show status of current file
 * improve handling of merge error
@@ -22,6 +21,7 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~prevent closing the the window if it's still saving~~
 * ~~handle conflicts with remote file~~
 * ~~append title and url of current page from bookmarklet~~
 * ~~append some text to current note when `?append=some+text` is sent in the query string~~

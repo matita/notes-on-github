@@ -20,10 +20,17 @@ interface FilesMap {
   [key: string]: CodeFile | undefined 
 }
 
+const preventClose = (event: BeforeUnloadEvent) => {
+  event.preventDefault();
+  return event.returnValue = 'You might lose your changes, do you want to really close the window?';
+};
+
 const debouncedUpdateFile = debounce(async (store, filepath, payload:UpdateFileOptions) => {
   store.updateFile(filepath, { isPushing: true });
   const file = store.getFile(filepath);
   const newGhFile = await updateFileContent(filepath, { ...payload, sha: file.sha });
+
+  store.preventWindowClose(false);
 
   if (newGhFile?.message && newGhFile?.message?.match(/does not match/)) {
     if (confirm(CONFIRM_MERGE_ERROR)) {
@@ -41,7 +48,8 @@ const debouncedUpdateFile = debounce(async (store, filepath, payload:UpdateFileO
 
 export const useFilesStore = defineStore('files', {
   state: () => ({
-    files: {} as FilesMap
+    files: {} as FilesMap,
+    preventingClose: false,
   }),
 
   getters: {
@@ -83,6 +91,7 @@ export const useFilesStore = defineStore('files', {
     },
 
     async updateFileContent(filepath: string, localContent: string) {
+      this.preventWindowClose(true);
       this.updateFile(filepath, { localContent });
       debouncedUpdateFile(this, filepath, { 
         content: localContent,
@@ -100,5 +109,19 @@ export const useFilesStore = defineStore('files', {
 
       this.updateFile(filepath, { localContent: newContent });
     },
+
+    preventWindowClose(shouldPrevent: boolean) {
+      if (shouldPrevent && !this.preventingClose) {
+        console.log('prevent close')
+        window.addEventListener('beforeunload', preventClose, { capture: true });
+        this.preventingClose = true;
+      }
+
+      if (!shouldPrevent && this.preventingClose) {
+        console.log('allow close');
+        window.removeEventListener('beforeunload', preventClose, { capture: true });
+        this.preventingClose = false;
+      }
+    }
   }
 })

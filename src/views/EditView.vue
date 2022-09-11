@@ -3,7 +3,6 @@
   import { pinia } from '@/stores';
   import { useFilesStore } from '@/stores/files';
   import { useSettings } from '@/stores/settings';
-  import { debounce } from 'lodash-es';
   import { watch, computed, ref, nextTick } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
 
@@ -17,9 +16,9 @@
   const router = useRouter();
   const selection = ref<[number, number?]>();
 
-  const onFileChange = debounce((fileContent) => {
+  const onFileChange = (fileContent: string) => {
     files.updateFileContent(props.filepath, fileContent);
-  }, 500);
+  };
 
   watch(
     () => props.filepath,
