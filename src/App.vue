@@ -4,7 +4,9 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <header>
-    <RouterLink to="/edit">Edit</RouterLink>
+    <RouterLink to="/edit?append">New note</RouterLink>
+    &middot;
+    <RouterLink to="/edit">Today</RouterLink>
     &middot;
     <RouterLink to="/settings">Settings</RouterLink>
   </header>

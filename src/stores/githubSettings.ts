@@ -8,7 +8,7 @@ interface GitHubSettings {
   repoName: string,
 }
 
-export const useGithubSettings = defineStore('githubSettings', {
+export const useSettings = defineStore('githubSettings', {
   state: (): GitHubSettings => ({
     token: '',
     repoUser: '',

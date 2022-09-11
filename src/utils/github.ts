@@ -1,9 +1,9 @@
 import { pinia } from '@/stores';
-import { useGithubSettings } from '@/stores/githubSettings';
+import { useSettings } from '@/stores/settings';
 
 const BASE_URL = 'https://api.github.com'
 
-const settings = useGithubSettings(pinia);
+const settings = useSettings(pinia);
 
 interface GitHubApi {
   get: (url:string )=> Promise<Response>,

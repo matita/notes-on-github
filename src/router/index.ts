@@ -1,8 +1,8 @@
-import { useGithubSettings } from '@/stores/githubSettings';
 import SettingsView from '@/views/SettingsView.vue';
 import { createRouter, createWebHashHistory } from 'vue-router'
 import EditView from '../views/EditView.vue'
 import { pinia } from '@/stores';
+import { useSettings } from '@/stores/settings';
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -25,10 +25,11 @@ const router = createRouter({
       name: 'edit-home',
       component: EditView,
       beforeEnter(to) {
-        const pad = (n: number) => `0${n}`.slice(-2);
-        const date = new Date();
+        const settings = useSettings(pinia);
+        const newNoteFilepath = settings.formattedNewNoteFilepath;
+
         return { 
-          path: `/edit/notes/${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}.md`, 
+          path: `/edit/${newNoteFilepath}`, 
           query: to.query,
         };
       }
@@ -49,7 +50,7 @@ router.beforeEach((to) => {
   }
 
   // Redirect to settings if the GitHub token hasn't been set yet
-  const githubSettings = useGithubSettings(pinia);
+  const githubSettings = useSettings(pinia);
   if(!githubSettings.token || !githubSettings.repo) {
     return { name: 'settings' };
   }
