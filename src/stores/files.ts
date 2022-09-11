@@ -112,13 +112,11 @@ export const useFilesStore = defineStore('files', {
 
     preventWindowClose(shouldPrevent: boolean) {
       if (shouldPrevent && !this.preventingClose) {
-        console.log('prevent close')
         window.addEventListener('beforeunload', preventClose, { capture: true });
         this.preventingClose = true;
       }
 
       if (!shouldPrevent && this.preventingClose) {
-        console.log('allow close');
         window.removeEventListener('beforeunload', preventClose, { capture: true });
         this.preventingClose = false;
       }
