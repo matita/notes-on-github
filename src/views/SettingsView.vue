@@ -2,6 +2,7 @@
 import { useSettings } from '@/stores/settings';
 import { reactive } from 'vue';
 import CodeEditor from '@/components/CodeEditor.vue';
+import bookmarklet from '../bookmarklet.js?raw';
 
   const settingsStore = useSettings();
 
@@ -37,6 +38,14 @@ import CodeEditor from '@/components/CodeEditor.vue';
     <form @submit.stop.prevent="onSubmit">
       <h1>Settings</h1>
       
+      <h2>Bookmarklet</h2>
+      <p>
+        Drag this into your bookmarks bar to create a new note from any page you're viewing.
+      </p>
+      <p>
+        <a :href="bookmarklet" class="bookmarklet" @click.prevent>New note</a>
+      </p>
+
       <h2>GitHub token</h2>
       <p>
         Authentication token to read and write on repository 
@@ -129,5 +138,19 @@ p + p {
 hr {
   margin-top: 2em;
   margin-bottom: 2em;
+}
+
+.bookmarklet {
+  cursor: grab;
+  text-decoration: none;
+  background-color: #eee;
+  color: #555;
+  border-radius: 4px;
+  box-shadow: 0 4px 4px rgba(0,0,0,.4);
+  padding: .2em .4em;
+}
+
+.bookmarklet:active {
+  cursor: grabbing;
 }
 </style>

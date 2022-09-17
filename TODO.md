@@ -16,6 +16,7 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~add bookmarklet to settings page~~
 * ~~navigation to go to prev/next day~~
 * ~~tooltip to open URLs~~
 * ~~underline for URLs that are not a link~~
