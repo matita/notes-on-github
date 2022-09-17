@@ -1,12 +1,15 @@
 import type {MarkdownConfig} from "@lezer/markdown"
 import { tags } from "@codemirror/highlight"
+import type { Tag } from '@lezer/highlight';
 
 const UrlDelim = {resolve: "Url", mark: "Url"}
 
 export const MarkdownUrl: MarkdownConfig = {
   defineNodes: [{
     name: 'Url',
-    style: {"Url/...": tags.link}
+    style: {
+      'Url/...': tags.link as Tag,
+    }
   }, {
     name: 'UrlMark',
   }],
