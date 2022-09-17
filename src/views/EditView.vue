@@ -10,6 +10,7 @@
     filepath: string
   }>();
 
+  const settings = useSettings();
   const files = useFilesStore();
   const file = computed(() => files.getFile(props.filepath));
   const route = useRoute();
@@ -23,13 +24,15 @@
   watch(
     () => props.filepath,
     async (newFilepath) => {
+      const viewedDate = settings.dateFromFile(newFilepath);
+      settings.setViewedDate(viewedDate);
       await files.fetchFile(newFilepath);
       
       let cursor = -1;
       let endCursor = -1;
       const { append } = route.query;
       if (typeof append !== 'undefined') {
-        const { formattedNewNoteTemplate, formattedSeparator } = useSettings(pinia);
+        const { formattedNewNoteTemplate, formattedSeparator } = settings;
 
         const valueToAppend = (append || '') as string;
         const indexOfValue = formattedNewNoteTemplate.indexOf('{value}');

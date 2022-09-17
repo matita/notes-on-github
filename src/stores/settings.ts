@@ -1,3 +1,4 @@
+import { addDays, getDateFromTemplate } from '@/utils/date';
 import { format } from '@/utils/template';
 import { defineStore } from "pinia";
 
@@ -30,6 +31,7 @@ export const useSettings = defineStore('settings', {
     newNoteFilepath: DEFAULT_NEW_NOTE_FILEPATH,
     newNoteTemplate: DEFAULT_NEW_NOTE_TEMPLATE,
     separator: DEFAULT_SEPARATOR,
+    viewedDate: new Date(),
   }),
   
   getters: {
@@ -37,11 +39,21 @@ export const useSettings = defineStore('settings', {
       ? `${state.repoUser}/${state.repoName}`
       : '',
     formattedNewNoteFilepath: (state) => format(state.newNoteFilepath),
+    formattedPrevNoteFilepath: (state) => format(state.newNoteFilepath, addDays(state.viewedDate, -1)),
+    formattedNextNoteFilepath: (state) => format(state.newNoteFilepath, addDays(state.viewedDate, 1)),
     formattedNewNoteTemplate: (state) => format(state.newNoteTemplate),
     formattedSeparator: (state) => format(state.separator),
+    dateFromFile: (state) => (filepath: string) => {
+      const template = state.newNoteFilepath;
+      return getDateFromTemplate(template, filepath);
+    },
   },
 
   actions: {
+    setViewedDate(date:Date) {
+      this.viewedDate = date;
+    },
+
     save({ token, repoUser, repoName, newNoteFilepath, newNoteTemplate, separator }: Settings) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ 
         token, 

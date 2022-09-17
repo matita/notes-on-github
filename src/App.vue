@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import { useSettings } from './stores/settings';
+
+const settings = useSettings();
 </script>
 
 <template>
   <header>
-    <RouterLink to="/edit?append">New note</RouterLink>
+    <RouterLink tag="button" :to="`/edit/${settings.formattedNewNoteFilepath}`">Today</RouterLink>
+    &mdash;
+    <RouterLink tag="button" :to="`/edit/${settings.formattedPrevNoteFilepath}`">Prev day</RouterLink>
     &middot;
-    <RouterLink to="/edit">Today</RouterLink>
-    &middot;
+    <RouterLink tag="button" :to="`/edit/${settings.formattedNextNoteFilepath}`">Next day</RouterLink>
+    &mdash;
     <RouterLink to="/settings">Settings</RouterLink>
   </header>
 
