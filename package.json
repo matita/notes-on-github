@@ -11,8 +11,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@codemirror/highlight": "^0.19.8",
     "@codemirror/lang-markdown": "^6.0.1",
     "@codemirror/theme-one-dark": "^6.0.0",
+    "@lezer/markdown": "^1.0.1",
     "codemirror": "^6.0.1",
     "lodash-es": "^4.17.21",
     "pinia": "^2.0.21",

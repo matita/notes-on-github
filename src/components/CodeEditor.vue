@@ -4,6 +4,8 @@
   import { oneDark } from '@codemirror/theme-one-dark';
   import { EditorView } from 'codemirror';
   import { EditorSelection } from '@codemirror/state';
+  import { MarkdownUrl } from './codeeditorUtils/MarkdownUrlParser';
+  import { cursorTooltip } from './codeeditorUtils/TooltipExtension';
 import { ref, watch } from 'vue';
 
   const props = defineProps<{
@@ -19,15 +21,20 @@ import { ref, watch } from 'vue';
     '& .cm-scroller': { overflow: 'auto' },
   });
 
-  const editorView = ref<EditorView>();
 
   const extensions = [
-    markdown(),
+    markdown({
+      extensions: [
+        MarkdownUrl,
+      ]
+    }),
     fullHeight,
     oneDark,
     EditorView.lineWrapping,
+    ...cursorTooltip(),
   ];
 
+  const editorView = ref<EditorView>();
   watch(
     () => props.selection,
     (newSelection) => {
