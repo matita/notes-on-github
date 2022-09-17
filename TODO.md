@@ -7,7 +7,6 @@
 * add settings: delay ms for pushing
 
 ## Markdown editor changes
-* underline for URLs that are not a link
 * open link when cmd+click on any URL in the text
 * some styling for blockquotes (maybe)
 * theme from vscode
@@ -17,6 +16,8 @@
 * search asana task by typing `@asana some task title` and have the autocompletion search for it
 
 ## Done
+* ~~tooltip to open URLs~~
+* ~~underline for URLs that are not a link~~
 * ~~add settings:~~
   * ~~default first file (`notes/{YYYY}-{MM}-{DD}.md` by default)~~
   * ~~template for new notes (default `## {hh}:{mm}:{ss}\n\n`)~~
