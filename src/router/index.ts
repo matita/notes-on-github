@@ -50,8 +50,8 @@ router.beforeEach((to) => {
   }
 
   // Redirect to settings if the GitHub token hasn't been set yet
-  const githubSettings = useSettings(pinia);
-  if(!githubSettings.token || !githubSettings.repo) {
+  const settings = useSettings(pinia);
+  if(!settings.token || !settings.repo) {
     return { name: 'settings' };
   }
 });

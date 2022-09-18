@@ -67,13 +67,18 @@
   );
 
   const onFileSelected = (payload: Event) => {
-    router.push(`/edit/${(payload.target as HTMLSelectElement).value}`);
+    const newFilePath = (payload.target as HTMLSelectElement).value;
+    if (!newFilePath) {
+      return;
+    }
+    router.push(`/edit/${newFilePath}`);
   };
 </script>
 
 <template>
   <div class="wrapper">
     <select @input="onFileSelected">
+      <option value="">-- Select file --</option>
       <option 
         v-for="file in files.listFiles"
         :value="file"
