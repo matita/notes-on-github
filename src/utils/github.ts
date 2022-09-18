@@ -48,10 +48,15 @@ const api = ():GitHubApi | null => {
 const base64ToUtf8 = (str:string) => decodeURIComponent(escape(window.atob(str)));
 const utf8ToBase64 = (str:string) => window.btoa(unescape(encodeURIComponent( str )))
 
-export const fetchFile = async (filepath: string) => {
-  const res = await api()?.get(`/repos/${settings.repoUser}/${settings.repoName}/contents/${filepath}`);
+export const fetchContent = async (path: string) => {
+  const res = await api()?.get(`/repos/${settings.repoUser}/${settings.repoName}/contents/${path}`);
   const data = await res?.json();
-  
+  return data;
+}
+
+
+export const fetchFile = async (filepath: string) => {
+  const data = await fetchContent(filepath);
   if (typeof data?.content === 'undefined') {
     return null;
   }
@@ -74,4 +79,4 @@ export const updateFileContent = async (filepath: string, payload: UpdateFileOpt
   const data = await res?.json();
   
   return data;
-}
+};

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { fetchFile, updateFileContent } from "@/utils/github";
+import { fetchContent, fetchFile, updateFileContent } from "@/utils/github";
 import type { UpdateFileOptions } from '@/utils/github'
 import { debounce } from "lodash";
 
@@ -14,11 +14,14 @@ interface CodeFile {
   localContent?: string,
   remoteContent?: string | null,
   sha?: string,
+  type?: 'dir' | 'file',
 }
 
 interface FilesMap { 
   [key: string]: CodeFile | undefined 
 }
+
+const count = (text:string, token:string) => text.split(token).length - 1;
 
 const preventClose = (event: BeforeUnloadEvent) => {
   event.preventDefault();
@@ -50,6 +53,8 @@ export const useFilesStore = defineStore('files', {
   state: () => ({
     files: {} as FilesMap,
     preventingClose: false,
+    fetchingfiles: false,
+    dirsToFetch: [] as string[],
   }),
 
   getters: {
@@ -57,7 +62,14 @@ export const useFilesStore = defineStore('files', {
     getFileContent: (state) => (filepath: string) => { 
       const file = state.files[filepath];
       return file?.localContent;
-    }
+    },
+    listFiles: (state) => Object.entries(state.files)
+      .filter(([ filepath, item ]) => item?.type === 'file')
+      .sort(([a], [b]) => (
+        count(a, '/') - count(b, '/')
+        || a.localeCompare(b)
+      ))
+      .map(([ filepath ]) => filepath),
   },
 
   actions: {
@@ -120,6 +132,42 @@ export const useFilesStore = defineStore('files', {
         window.removeEventListener('beforeunload', preventClose, { capture: true });
         this.preventingClose = false;
       }
-    }
+    },
+
+    async fetchAllFiles(path: string = '') {
+      try {
+        this.fetchingfiles = true;
+        const items = await fetchContent(path);
+        if (items?.message) {
+          return console.error(`Error while fetching files at '${path}': ${items.message}`);
+        }
+  
+        if (!Array.isArray(items)) {
+          return console.warn(`Return of fetchAllFiles('${path}') is not an array.`, items);
+        }
+  
+        for (const item of items) {
+          const { path, name, sha, type } = item;
+          if (name.startsWith('.')) {
+            continue;
+          }
+
+          const existingFile = this.files[path] || {};
+          // Avoid to recurse on dirs that are not changed from last time
+          if (type === 'dir' && existingFile.sha !== sha) {
+            this.dirsToFetch.push(path);
+          }
+
+          this.updateFile(path, { sha, type });
+        }
+
+        const dirToFetch = this.dirsToFetch.shift();
+        if (dirToFetch) {
+          this.fetchAllFiles(dirToFetch);
+        }
+      } finally {
+        this.fetchingfiles = false;
+      }
+    },
   }
 })

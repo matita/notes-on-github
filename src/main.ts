@@ -5,6 +5,7 @@ import router from './router'
 import './assets/main.css'
 import { useSettings } from './stores/settings'
 import { pinia } from './stores'
+import { useFilesStore } from './stores/files'
 
 window.global = window;
 
@@ -15,5 +16,8 @@ app.use(router)
 
 const settings = useSettings(pinia);
 settings.load();
+
+const files = useFilesStore(pinia);
+files.fetchAllFiles();
 
 app.mount('#app')

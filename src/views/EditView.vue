@@ -65,12 +65,22 @@
       immediate: true,
     }
   );
+
+  const onFileSelected = (payload: Event) => {
+    router.push(`/edit/${(payload.target as HTMLSelectElement).value}`);
+  };
 </script>
 
 <template>
   <div class="wrapper">
-    <select>
-      <option :value="filepath" selected>{{ filepath }}</option>
+    <select @input="onFileSelected">
+      <option 
+        v-for="file in files.listFiles"
+        :value="file"
+        :selected="file === filepath"
+      >
+        {{ file }}
+      </option>
     </select>
     <div class="editor-wrapper">
       <CodeEditor 
