@@ -6,19 +6,20 @@
   import { EditorSelection } from '@codemirror/state';
   import { MarkdownUrl } from './codeeditorUtils/MarkdownUrlParser';
   import { cursorTooltip } from './codeeditorUtils/TooltipExtension';
-import { ref, watch } from 'vue';
+  import { ref, watch } from 'vue';
 
   const props = defineProps<{
     placeholder?: string,
     value?: string,
     selection?: [number, number?],
     autofocus?: boolean,
-    disabled?:boolean,
+    disabled?: boolean,
+    fullHeight?: boolean,
   }>();
 
-  const fullHeight = EditorView.theme({
+  const fullHeightTheme = EditorView.theme({
     '&': { height: '100%' },
-    '& .cm-scroller': { overflow: 'auto' },
+    '& .cm-scroller': { overflow: 'auto', paddingBottom: props.fullHeight ? '50vh' : '' },
   });
 
 
@@ -28,7 +29,7 @@ import { ref, watch } from 'vue';
         MarkdownUrl,
       ]
     }),
-    fullHeight,
+    fullHeightTheme,
     oneDark,
     EditorView.lineWrapping,
     ...cursorTooltip(),
@@ -53,6 +54,7 @@ import { ref, watch } from 'vue';
 
 <template>
   <Codemirror
+    :class="{ 'full-height': fullHeight }"
     :placeholder="placeholder || ''"
     :model-value="value"
     :extensions="extensions"
@@ -63,5 +65,12 @@ import { ref, watch } from 'vue';
 </template>
 
 <style scoped>
-
+.v-codemirror.full-height {
+  display: block!important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
 </style>

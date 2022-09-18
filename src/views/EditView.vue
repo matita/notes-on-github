@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import CodeEditor from '@/components/CodeEditor.vue';
-  import { pinia } from '@/stores';
   import { useFilesStore } from '@/stores/files';
   import { useSettings } from '@/stores/settings';
   import { watch, computed, ref, nextTick } from 'vue';
@@ -58,7 +57,8 @@
         }
         
         selection.value = [cursor, endCursor];
-        window.scrollTo(0, document.body.scrollHeight);
+        const scroller = document.querySelector('.cm-scroller');
+        scroller?.scrollTo(0, scroller?.scrollHeight);
       });
     },
     {
@@ -79,6 +79,7 @@
         :disabled="file?.isPulling"
         :selection="selection"
         autofocus
+        full-height
         @change="onFileChange"
       ></CodeEditor>
     </div>
@@ -99,5 +100,7 @@
 
 .editor-wrapper {
   flex: 1;
+  overflow: auto;
+  position: relative;
 }
 </style>

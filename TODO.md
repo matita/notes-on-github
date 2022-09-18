@@ -1,4 +1,3 @@
-* set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)
 * show status of current file
 * improve handling of merge error
 * add toasts to show error messages
@@ -34,6 +33,7 @@
 * compute maths similar to https://mathnotepad.com/ (powered by mathjs.org), displayed as widget decorator
 
 ## Done
+* ~~set dynamic height for CodeMirror (currently it's 100% but goes beyond if more lines of code than height)~~
 * ~~add bookmarklet to settings page~~
 * ~~navigation to go to prev/next day~~
 * ~~tooltip to open URLs~~
