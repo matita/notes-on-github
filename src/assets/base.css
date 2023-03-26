@@ -75,5 +75,5 @@ body {
 @font-face {
   font-family: "Consolas";
   src: local("Consolas"),
-   url(./fonts/Consolas-Font/Consola.ttf) format("truetype");
+   url(./fonts/Consolas-Font/CONSOLA.ttf) format("truetype");
 }
