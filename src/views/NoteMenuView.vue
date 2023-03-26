@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { useCurrentFile } from '@/stores/currentFile';
 import { useCurrentTimedNote } from '@/stores/currentTimedNote';
 import { useFilesStore } from '@/stores/files';
+import { formatDateAndTime, parseDate } from '@/utils/date';
 import { computed } from '@vue/reactivity';
 import { ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 
 const currentNote = useCurrentTimedNote();
 const files = useFilesStore();
+const currentFile = useCurrentFile();
 const $toast = useToast();
 
 const isMoving = ref(false);
@@ -52,13 +55,16 @@ const moveToFile = async (filepath: string) => {
     return;
   }
 
-  const line = text.split('\n')[0];
+  const date = parseDate(text, parseDate(currentFile.value));
+  const newDatedText = text.replace(/^[^\n]*/, `## ${formatDateAndTime(date)}`);
+  const line = newDatedText.split('\n')[0];
+
   if (!confirm(`Are you sure you want to move '${line}' to '${filepath}'?`)) {
     return;
   }
-
+  
   await files.fetchFile(filepath)
-  files.appendContent(filepath, text, true);
+  files.appendContent(filepath, newDatedText, true);
   deleteNote();
   close();
   $toast.success(`Moved to <a href="#/edit/${filepath}">${filepath}</a>`, { duration: 3000 });

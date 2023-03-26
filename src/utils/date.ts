@@ -45,3 +45,13 @@ export const parseDate = (text:string, baseDate:Date = new Date()):Date => {
   
   return date;
 }
+
+const pad = (num: number) => ('0' + num).slice(-2);
+
+export const formatDateAndTime = (date: Date) => {
+  return (
+    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}` +
+    ' ' +
+    `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+  );
+}

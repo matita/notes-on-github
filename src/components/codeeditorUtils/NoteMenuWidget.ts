@@ -54,7 +54,7 @@ function noteMenus(view: EditorView) {
         }
 
         const nodeText = view.state.doc.sliceString(node.from, node.to);
-        const timeMatch = nodeText.match(/(\d\d):(\d\d):(\d\d)/);
+        const timeMatch = nodeText.match(/((\d{4})-(\d{2})-(\d{2}) )?(\d\d):(\d\d):(\d\d)/);
         
         if (!timeMatch) {
           return;
@@ -110,7 +110,7 @@ export const noteMenuPlugin = ViewPlugin.fromClass(class {
         const from = startingLine.from;
         const text = getNoteText(view, pos);
         const to = from + text.length;
-        
+
         currentTimedNote.setCurrentNote({ 
           view,
           from,
