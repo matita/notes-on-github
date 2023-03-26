@@ -116,7 +116,7 @@ export const useFilesStore = defineStore('files', {
 
     updateFileContent(filepath: string, localContent: string) {
       this.preventWindowClose(true);
-      this.updateFile(filepath, { localContent });
+      this.updateFile(filepath, { localContent, type: 'file' });
       return debouncedUpdateFile(filepath)(this, filepath, { 
         content: localContent,
         message: 'Update file'

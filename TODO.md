@@ -31,6 +31,8 @@
 * compute maths similar to https://mathnotepad.com/ (powered by mathjs.org), displayed as widget decorator
 
 ## Done
+* [x] add date to moved timed note when moving to other file (otherwise it will only have time)
+* [x] make file selector reactive when adding non-existing files
 * ~~leave space to bottom of page~~
 * ~~go to any file~~
 * ~~list all files~~
