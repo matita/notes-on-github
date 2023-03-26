@@ -44,7 +44,7 @@ class NoteMenuWidget extends WidgetType {
 }
 
 function noteMenus(view: EditorView) {
-  const widgets = []
+  const widgets: any[] = []
   for (let {from, to} of view.visibleRanges) {
     syntaxTree(view.state).iterate({
       from, to,

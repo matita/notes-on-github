@@ -21,6 +21,4 @@ settings.load();
 const files = useFilesStore(pinia);
 files.fetchAllFiles();
 
-window.files = files;
-
 app.mount('#app')

@@ -28,9 +28,9 @@ const preventClose = (event: BeforeUnloadEvent) => {
   return event.returnValue = 'You might lose your changes, do you want to really close the window?';
 };
 
-const debouncedUpdates = {};
+const debouncedUpdates: Record<string, any> = {};
 const debouncedUpdateFile = (filepath: string) => {
-  const fn = debouncedUpdates[filepath] || debounce(async (store: StoreDefinition, filepath: string, payload:UpdateFileOptions) => {
+  const fn = debouncedUpdates[filepath] || debounce(async (store, filepath: string, payload:UpdateFileOptions) => {
     console.log('after debounce', { filepath, payload });
     store.updateFile(filepath, { isPushing: true });
     const file = store.getFile(filepath);
