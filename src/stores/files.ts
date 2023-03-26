@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore, type StoreDefinition } from "pinia";
 import { fetchContent, fetchFile, updateFileContent } from "@/utils/github";
 import type { UpdateFileOptions } from '@/utils/github'
 import { debounce } from "lodash";
@@ -28,26 +28,33 @@ const preventClose = (event: BeforeUnloadEvent) => {
   return event.returnValue = 'You might lose your changes, do you want to really close the window?';
 };
 
-const debouncedUpdateFile = debounce(async (store, filepath, payload:UpdateFileOptions) => {
-  store.updateFile(filepath, { isPushing: true });
-  const file = store.getFile(filepath);
-  const newGhFile = await updateFileContent(filepath, { ...payload, sha: file.sha });
+const debouncedUpdates = {};
+const debouncedUpdateFile = (filepath: string) => {
+  const fn = debouncedUpdates[filepath] || debounce(async (store: StoreDefinition, filepath: string, payload:UpdateFileOptions) => {
+    console.log('after debounce', { filepath, payload });
+    store.updateFile(filepath, { isPushing: true });
+    const file = store.getFile(filepath);
+    const newGhFile = await updateFileContent(filepath, { ...payload, sha: file.sha });
 
-  store.preventWindowClose(false);
+    store.preventWindowClose(false);
 
-  if (newGhFile?.message && newGhFile?.message?.match(/does not match/)) {
-    if (confirm(CONFIRM_MERGE_ERROR)) {
-      return location.reload();
+    if (newGhFile?.message && newGhFile?.message?.match(/does not match/)) {
+      if (confirm(CONFIRM_MERGE_ERROR)) {
+        return location.reload();
+      }
     }
-  }
-  
-  const newState: CodeFile = { isPushing: false };
-  if (newGhFile?.content?.sha) {
-    newState.sha = newGhFile.content.sha;
-  }
+    
+    const newState: CodeFile = { isPushing: false };
+    if (newGhFile?.content?.sha) {
+      newState.sha = newGhFile.content.sha;
+    }
 
-  store.updateFile(filepath, newState);
-}, DEBOUNCE_UPDATE_MS);
+    store.updateFile(filepath, newState);
+  }, DEBOUNCE_UPDATE_MS);
+
+  debouncedUpdates[filepath] = fn;
+  return fn;
+}
 
 export const useFilesStore = defineStore('files', {
   state: () => ({
@@ -96,30 +103,36 @@ export const useFilesStore = defineStore('files', {
         throw new Error('Removing sha');
       }
 
-      this.$state.files[filepath] = {
-        ...currentFile,
-        ...options,
-      };
+      this.$patch({
+        files: {
+          ...this.$state.files,
+          [filepath]: {
+            ...currentFile,
+            ...options,
+          },
+        },
+      });
     },
 
-    async updateFileContent(filepath: string, localContent: string) {
+    updateFileContent(filepath: string, localContent: string) {
       this.preventWindowClose(true);
-      this.updateFile(filepath, { localContent });
-      debouncedUpdateFile(this, filepath, { 
+      this.updateFile(filepath, { localContent, type: 'file' });
+      return debouncedUpdateFile(filepath)(this, filepath, { 
         content: localContent,
         message: 'Update file'
       });
     },
 
-    async appendContent(filepath: string, toAppend: string, withSeparator = true) {
+    appendContent(filepath: string, toAppend: string, withSeparator = true) {
       const file = this.getFile(filepath);
       const content = file?.localContent;
-      const separator = withSeparator ? '\n\n-----\n' : '';
+      const lineBreak = '-----'
+      const separator = withSeparator ? `\n\n${lineBreak}\n` : '';
       const newContent = content?.trim()
-        ? content + separator + toAppend
+        ? content.replace(new RegExp(lineBreak + '\\n*$'), '').trim() + separator + toAppend
         : toAppend;
 
-      this.updateFile(filepath, { localContent: newContent });
+      this.updateFileContent(filepath, newContent);
     },
 
     preventWindowClose(shouldPrevent: boolean) {

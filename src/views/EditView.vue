@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import CodeEditor from '@/components/CodeEditor.vue';
+import { useCurrentFile } from '@/stores/currentFile';
   import { useFilesStore } from '@/stores/files';
   import { useSettings } from '@/stores/settings';
   import { watch, computed, ref, nextTick } from 'vue';
@@ -11,6 +12,8 @@
 
   const settings = useSettings();
   const files = useFilesStore();
+  const currentFile = useCurrentFile();
+
   const file = computed(() => files.getFile(props.filepath));
   const route = useRoute();
   const router = useRouter();
@@ -23,6 +26,7 @@
   watch(
     () => props.filepath,
     async (newFilepath) => {
+      currentFile.set(newFilepath);
       const viewedDate = settings.dateFromFile(newFilepath);
       settings.setViewedDate(viewedDate);
       await files.fetchFile(newFilepath);

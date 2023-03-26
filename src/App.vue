@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import { useSettings } from './stores/settings';
+import { useCurrentTimedNote } from './stores/currentTimedNote';
+import NoteMenuView from './views/NoteMenuView.vue';
 
 const settings = useSettings();
 </script>
@@ -17,6 +19,7 @@ const settings = useSettings();
   </header>
 
   <RouterView />
+  <NoteMenuView />
 </template>
 
 <style scoped>
