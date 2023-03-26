@@ -21,7 +21,7 @@
   const fullHeightTheme = EditorView.theme({
     '&': { height: props.fullHeight ? '100%' : '' },
     '& .cm-scroller': { 
-      fontFamily: 'Consolas',
+      fontFamily: 'Consolas, monospace',
       overflow: 'auto', 
       paddingBottom: props.fullHeight ? '50vh' : '',
     },
