@@ -7,6 +7,7 @@
   import { MarkdownUrl } from './codeeditorUtils/MarkdownUrlParser';
   import { cursorTooltip } from './codeeditorUtils/TooltipExtension';
   import { ref, watch } from 'vue';
+  import { noteMenuPlugin } from './codeeditorUtils/NoteMenuWidget';
 
   const props = defineProps<{
     placeholder?: string,
@@ -18,8 +19,12 @@
   }>();
 
   const fullHeightTheme = EditorView.theme({
-    '&': { height: '100%' },
-    '& .cm-scroller': { overflow: 'auto', paddingBottom: props.fullHeight ? '50vh' : '' },
+    '&': { height: props.fullHeight ? '100%' : '' },
+    '& .cm-scroller': { 
+      fontFamily: 'Consolas',
+      overflow: 'auto', 
+      paddingBottom: props.fullHeight ? '50vh' : '',
+    },
   });
 
 
@@ -33,6 +38,7 @@
     oneDark,
     EditorView.lineWrapping,
     ...cursorTooltip(),
+    noteMenuPlugin,
   ];
 
   const editorView = ref<EditorView>();

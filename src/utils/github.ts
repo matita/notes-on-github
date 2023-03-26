@@ -67,15 +67,21 @@ export const fetchFile = async (filepath: string) => {
   };
 };
 
+let lastUpdateApiCall: Promise<Response> | undefined;
 export const updateFileContent = async (filepath: string, payload: UpdateFileOptions) => {
   const content = utf8ToBase64(payload.content);
   const message = payload.message || 'Update file';
   const { sha } = payload;
-  const res = await api()?.put(`/repos/${settings.repoUser}/${settings.repoName}/contents/${filepath}`, { 
+  if (lastUpdateApiCall) {
+    await lastUpdateApiCall;
+  }
+  const req = api()?.put(`/repos/${settings.repoUser}/${settings.repoName}/contents/${filepath}`, { 
     content, 
     message, 
     sha 
   });
+  lastUpdateApiCall = req;
+  const res = await req;
   const data = await res?.json();
   
   return data;
